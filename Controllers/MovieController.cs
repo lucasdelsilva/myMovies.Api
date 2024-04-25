@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MyMovies.Api.DTOs;
+using MyMovies.Api.Services.Interfaces;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace MyMovies.Api.Controllers
 {
@@ -8,36 +9,56 @@ namespace MyMovies.Api.Controllers
     [ApiController]
     public class MovieController : ControllerBase
     {
+        private readonly IMovieServices _movieServices;
+        public MovieController(IMovieServices movieServices)
+        {
+            _movieServices = movieServices;
+        }
+
         // GET: api/<MovieController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IActionResult> GetAll()
         {
-            return new string[] { "value1", "value2" };
+            var result = await _movieServices.GetAllAsync();
+            if (result is null)
+                return NotFound();
+
+            return Ok(result);
         }
 
         // GET api/<MovieController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            var result = await _movieServices.GetAsync(id);
+            if (result is null)
+                return NotFound();
+
+            return Ok(result);
         }
 
         // POST api/<MovieController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> AdddMovie([FromBody] MovieAddDto movieDto)
         {
-        }
+            var result = await _movieServices.AddAsync(movieDto);
+            if (result)
+                return Ok(result);
 
-        // PUT api/<MovieController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
+            return BadRequest();
         }
 
         // DELETE api/<MovieController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        //[HttpDelete("{id}")]
+        //public void Delete(int id)
+        //{
+        //}
+
+        //// PUT api/<MovieController>/5
+        //[HttpPut("{id}")]
+        //public void Put(int id, [FromBody] string value)
+        //{
+        //}
+
     }
 }
