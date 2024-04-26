@@ -1,11 +1,13 @@
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using MyMovies.Api.Context.Data;
 using MyMovies.Api.Mappers;
 using MyMovies.Api.Repositories;
 using MyMovies.Api.Repositories.Interfaces;
 using MyMovies.Api.Services;
 using MyMovies.Api.Services.Interfaces;
+using System.Reflection;
 
 internal class Program
 {
@@ -18,7 +20,13 @@ internal class Program
 
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddSwaggerGen(config =>
+        {
+            config.SwaggerDoc("v1", new OpenApiInfo { Title = "FilmesAPI", Version = "v1" });
+            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            config.IncludeXmlComments(xmlPath);
+        });
 
         var app = builder.Build();
         if (app.Environment.IsDevelopment())

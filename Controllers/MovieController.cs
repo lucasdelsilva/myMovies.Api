@@ -37,8 +37,18 @@ namespace MyMovies.Api.Controllers
             return NotFound();
         }
 
+        /// <summary>
+        /// Adiciona um filme.
+        /// </summary>
+        /// <param name="movieDto">Objeto de request</param>
+        /// <returns>IActionResult</returns>
+        /// <response code="200">Caso seja adicionado com Sucesso.</response>
+        /// <response code="400">Caso ocorra algum erro.</response>
+
         // POST api/<MovieController>
         [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> AdddMovie([FromBody] MovieAddDto movieDto)
         {
             var result = await _movieServices.AddAsync(movieDto);
