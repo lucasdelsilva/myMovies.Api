@@ -20,10 +20,10 @@ namespace MyMovies.Api.Controllers
         public async Task<IActionResult> GetAll()
         {
             var result = await _movieServices.GetAllAsync();
-            if (result is null)
-                return NotFound();
+            if (result is not null)
+                return Ok(result);
 
-            return Ok(result);
+            return NotFound();
         }
 
         // GET api/<MovieController>/5
@@ -31,10 +31,10 @@ namespace MyMovies.Api.Controllers
         public async Task<IActionResult> Get(int id)
         {
             var result = await _movieServices.GetAsync(id);
-            if (result is null)
-                return NotFound();
+            if (result is not null)
+                return Ok(result);
 
-            return Ok(result);
+            return NotFound();
         }
 
         // POST api/<MovieController>
@@ -48,17 +48,26 @@ namespace MyMovies.Api.Controllers
             return BadRequest();
         }
 
-        // DELETE api/<MovieController>/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
+        // PUT api/<MovieController>/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, [FromBody] MoviePutDto moviePutDto)
+        {
+            var result = await _movieServices.PutAsync(id, moviePutDto);
+            if (result)
+                return Ok(result);
 
-        //// PUT api/<MovieController>/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
+            return NotFound();
+        }
 
+        //DELETE api/<MovieController>/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _movieServices.RemoveAsync(id);
+            if (result)
+                return Ok(result);
+
+            return BadRequest();
+        }
     }
 }

@@ -49,5 +49,36 @@ namespace MyMovies.Api.Repositories
 
             return null;
         }
+
+        public async Task<bool> Put(int id, MoviePutDto movie)
+        {
+            var movieId = await _dbContext.Movies.Where(x => x.Id.Equals(id)).AsNoTracking().FirstOrDefaultAsync();
+            if (movieId is null)
+                return false;
+
+            var movieMap = movie.Adapt<Movie>();
+            if (movieMap is not null)
+            {
+                movieMap.Id = movieId.Id;
+                _dbContext.Update(movieMap);
+                await _dbContext.SaveChangesAsync();
+
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<bool> Remove(int id)
+        {
+            var movie = await _dbContext.Movies.Where(x => x.Id.Equals(id)).AsNoTracking().FirstOrDefaultAsync();
+            if (movie is not null)
+            {
+                _dbContext.Remove(movie);
+                await _dbContext.SaveChangesAsync();
+
+                return true;
+            }
+            return false;
+        }
     }
 }

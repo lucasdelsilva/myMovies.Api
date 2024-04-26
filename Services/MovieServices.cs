@@ -1,5 +1,4 @@
-﻿using MyMovies.Api.Domain.Models;
-using MyMovies.Api.DTOs;
+﻿using MyMovies.Api.DTOs;
 using MyMovies.Api.Repositories.Interfaces;
 using MyMovies.Api.Services.Interfaces;
 
@@ -16,6 +15,16 @@ namespace MyMovies.Api.Services
         public Task<bool> AddAsync(MovieAddDto movieDto)
         {
             return _repository.Add(movieDto);
+        }
+
+        public Task<bool> PutAsync(int id, MoviePutDto movieDto)
+        {
+            return _repository.Put(id, movieDto);
+        }
+
+        public Task<bool> RemoveAsync(int id)
+        {
+            return _repository.Remove(id);
         }
 
         public Task<List<MovieGetDto>> GetAllAsync()
