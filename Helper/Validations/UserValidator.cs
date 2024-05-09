@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using MyMovies.Api.DTOs;
-using System.Text.RegularExpressions;
 
 namespace MyMovies.Api.Helper.Validations
 {
@@ -10,7 +9,7 @@ namespace MyMovies.Api.Helper.Validations
         {
             RuleFor(x => x.Name).NotEmpty().WithMessage("Nome é obrigatório.");
             RuleFor(x => x.Surname).NotEmpty().WithMessage("Sobrenome é obrigatório.");
-            RuleFor(x => x.UserName).NotEmpty().WithMessage("Login de acesso é obrigatório.");
+            RuleFor(x => x.UserName).NotEmpty().WithMessage("Usuário de acesso é obrigatório.");
             RuleFor(x => x.Email).NotEmpty().WithMessage("Email é obrigatório.");
             RuleFor(x => x.Birthday).Must(VrBirth).WithMessage("Data de nascimento não atende a condição definida.");
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MyMovies.Api.DTOs;
 using MyMovies.Api.Services.Interfaces;
 
@@ -22,6 +23,7 @@ namespace MyMovies.Api.Controllers
         /// <response code="404">Caso não encontre os filmes.</response>
         // GET: api/<MovieController>
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAll()
         {
             var result = await _movieServices.GetAllAsync();

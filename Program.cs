@@ -7,6 +7,8 @@ using MyMovies.Api.Mappers;
 using MyMovies.Api.Repositories;
 using MyMovies.Api.Repositories.Interfaces;
 using MyMovies.Api.Services;
+using MyMovies.Api.Services.Authentication;
+using MyMovies.Api.Services.Authentication.Token;
 using MyMovies.Api.Services.Interfaces;
 
 internal class Program
@@ -45,6 +47,9 @@ internal class Program
 
     private static void ConfigurationInterfaces(WebApplicationBuilder builder)
     {
+        builder.Services.AddScoped<IAuthenticationServices, AuthenticationServices>();
+        builder.Services.AddScoped<ITokenServices, TokenServices>();
+
         builder.Services.AddScoped<IMovieServices, MovieServices>();
         builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 
@@ -64,7 +69,6 @@ internal class Program
         });
 
         builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ApplicationContext>().AddDefaultTokenProviders();
-
         builder.Services.RegisterMaps();
     }
 }
