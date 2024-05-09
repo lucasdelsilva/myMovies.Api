@@ -1,13 +1,13 @@
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 using MyMovies.Api.Context.Data;
+using MyMovies.Api.Domain.Models;
 using MyMovies.Api.Mappers;
 using MyMovies.Api.Repositories;
 using MyMovies.Api.Repositories.Interfaces;
 using MyMovies.Api.Services;
 using MyMovies.Api.Services.Interfaces;
-using System.Reflection;
 
 internal class Program
 {
@@ -20,13 +20,14 @@ internal class Program
 
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen(config =>
-        {
-            config.SwaggerDoc("v1", new OpenApiInfo { Title = "FilmesAPI", Version = "v1" });
-            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-            config.IncludeXmlComments(xmlPath);
-        });
+        builder.Services.AddSwaggerGen();
+        //builder.Services.AddSwaggerGen(config =>
+        //{
+        //    config.SwaggerDoc("v1", new OpenApiInfo { Title = "FilmesAPI", Version = "v1" });
+        //    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        //    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+        //    config.IncludeXmlComments(xmlPath);
+        //});
 
         var app = builder.Build();
         if (app.Environment.IsDevelopment())
@@ -46,6 +47,9 @@ internal class Program
     {
         builder.Services.AddScoped<IMovieServices, MovieServices>();
         builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+
+        builder.Services.AddScoped<IUserServices, UserServices>();
+        builder.Services.AddScoped<IUserRepository, UserRepository>();
     }
 
     [Obsolete]
@@ -58,6 +62,8 @@ internal class Program
         {
             conf.RegisterValidatorsFromAssembly(typeof(Program).Assembly);
         });
+
+        builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ApplicationContext>().AddDefaultTokenProviders();
 
         builder.Services.RegisterMaps();
     }

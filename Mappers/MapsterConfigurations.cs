@@ -8,10 +8,9 @@ namespace MyMovies.Api.Mappers
     {
         public static void RegisterMaps(this IServiceCollection services)
         {
-
+            //Filmes
             TypeAdapterConfig<MovieAddDto, Movie>.NewConfig();
             TypeAdapterConfig<Movie, MovieAddDto>.NewConfig();
-
             TypeAdapterConfig<Movie, MovieGetDto>
                 .NewConfig()
                 .Map(dest => dest.Titulo, src => src.Title)
@@ -20,6 +19,10 @@ namespace MyMovies.Api.Mappers
                 .Map(dest => dest.Generos, src => src.Gender)
                 .Map(dest => dest.Atores, src => src.Actors)
                 .Map(dest => dest.AnoLancamento, src => src.Year);
+
+            //Usuario
+            TypeAdapterConfig<UserAddDto, User>.NewConfig();
+            TypeAdapterConfig<User, UserAddDto>.NewConfig();
         }
     }
 }
